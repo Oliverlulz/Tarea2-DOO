@@ -4,7 +4,7 @@ import java.util.List;
 import java.time.Duration;
 import java.time.Instant;
 
-public class Reunion {
+public abstract class Reunion {
     private Date fecha;
     private Instant horaPrevista;
     private Duration duracionPrevista;

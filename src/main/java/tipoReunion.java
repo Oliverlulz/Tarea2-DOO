@@ -1,5 +1,3 @@
-
-
 /**
  * Representa los tipos de reuniones
  */

@@ -1,8 +1,7 @@
-
 import java.util.Date;
 
 /**
- * Representa una nota o apunte tomado durante el desarrollo de una reunión.
+ * Representa una nota o apunte tomado durante el desarrollo de una reunion.
  * Almacena el contenido textual del comentario y registra automaticamente
  * el momento exacto de su creacion para permitir su ordenamiento cronologico
  */
@@ -11,17 +10,17 @@ public class Nota {
     /** El texto o mensaje que contiene la nota */
     private String contenido;
 
-    /** La fecha y hora exacta en la que se registró la nota  */
+    /** La fecha y hora exacta en la que se registro la nota */
     private Date fechaCreacion;
 
     /**
-     * Constructor que inicializa una nueva nota con su contenido
+     * Constructor que inicializa una nueva nota con su contenido 
      * y captura el instante actual como fecha de creación
      * @param contenido El texto que se desea guardar en la nota
      */
-    public Nota(String contenido){
+    public Nota(String contenido) {
         this.contenido = contenido;
-        this.fechaCreacion = new Date();
+        this.fechaCreacion = new Date(); // Registra el momento actual automáticamente
     }
 
     /**
@@ -42,7 +41,6 @@ public class Nota {
 
     /**
      * Obtiene el momento exacto en que fue creada la nota
-     * Útil para ordenar cronológicamente el informe final
      * @return Objeto Date con la fecha y hora de creación
      */
     public Date getFechaCreacion() {
@@ -50,8 +48,8 @@ public class Nota {
     }
 
     /**
-     * Devuelve una representación en texto de la nota
-     * @return Una cadena de texto con la hora y el contenido.
+     * Devuelve una representacion en texto de la nota
+     * @return Una cadena de texto con la hora y el contenido
      */
     @Override
     public String toString() {

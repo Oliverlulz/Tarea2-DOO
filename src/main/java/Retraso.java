@@ -1,5 +1,5 @@
 import java.time.Instant;
 
-public class Retraso {
+public class Retraso extends Asistencia {
     private Instant hora;
 }

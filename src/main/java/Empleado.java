@@ -2,7 +2,7 @@
  * Representa a un empleado perteneciente a un departamento,
  * que puede ser invitado a una reunión
  */
-public class Empleado implements Invitable{
+public class Empleado implements Invitable {
     private String id;
     private String apellidos;
     private String nombre;
@@ -19,7 +19,22 @@ public class Empleado implements Invitable{
      * @param departamento el departamento al cual pertenece el empleado
      */
     public Empleado(String id, String apellidos, String nombre
-                    , String correo, Departamento departamento) {
+                    , String correo, Departamento departamento) throws DatoInvalidoException {
+        if (id == null || id.isBlank())
+            throw new DatoInvalidoException("La ID no puede estar vacía");
+
+        if (apellidos == null || apellidos.isBlank())
+            throw new DatoInvalidoException("Los Apellidos no pueden estar vacíos");
+
+        if (nombre == null || nombre.isBlank())
+            throw new DatoInvalidoException("El nombre no puede estar vacío");
+
+        if (correo == null || correo.isBlank())
+            throw new DatoInvalidoException("El correo no puede estar vacío");
+
+        if (departamento == null)
+            throw new DatoInvalidoException("El departamento no puede ser nulo");
+
         this.id = id;
         this.apellidos = apellidos;
         this.nombre = nombre;
@@ -39,7 +54,9 @@ public class Empleado implements Invitable{
      * Modifica la ID asociada al empleado
      * @param id La nueva ID que se le quiere asignar al empleado
      */
-    public void setId(String id) {
+    public void setId(String id) throws DatoInvalidoException {
+        if (id == null || id.isBlank())
+            throw new DatoInvalidoException("La ID no puede estar vacía");
         this.id = id;
     }
 
@@ -55,7 +72,9 @@ public class Empleado implements Invitable{
      * Modifica los apellidos de un empleado
      * @param apellidos Los apellidos a los que se quiere cambiar
      */
-    public void setApellidos(String apellidos) {
+    public void setApellidos(String apellidos) throws DatoInvalidoException {
+        if (apellidos == null || apellidos.isBlank())
+            throw new DatoInvalidoException("Los Apellidos no pueden estar vacíos");
         this.apellidos = apellidos;
     }
 
@@ -71,7 +90,9 @@ public class Empleado implements Invitable{
      * Modifica el correo asociado al empleado
      * @param correo El nuevo correo del empleado
      */
-    public void setCorreo(String correo) {
+    public void setCorreo(String correo) throws DatoInvalidoException {
+        if (correo == null || correo.isBlank())
+            throw new DatoInvalidoException("El correo no puede estar vacío");
         this.correo = correo;
     }
 
@@ -87,7 +108,9 @@ public class Empleado implements Invitable{
      * Modifica el nombre de un empleado
      * @param nombre El nombre al que se quiere cambiar
      */
-    public void setNombre(String nombre) {
+    public void setNombre(String nombre) throws DatoInvalidoException {
+        if (nombre == null || nombre.isBlank())
+            throw new DatoInvalidoException("El nombre no puede estar vacío");
         this.nombre = nombre;
     }
 
@@ -103,7 +126,9 @@ public class Empleado implements Invitable{
      * Modifica el departamento del cual el empleado pertenece
      * @param departamento El nuevo departamento donde se encuentra el empleado
      */
-    public void setDepartamento(Departamento departamento) {
+    public void setDepartamento(Departamento departamento) throws DatoInvalidoException {
+        if (departamento == null)
+            throw new DatoInvalidoException("El departamento no puede ser nulo");
         this.departamento = departamento;
     }
 

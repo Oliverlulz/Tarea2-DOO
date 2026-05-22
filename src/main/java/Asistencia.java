@@ -8,7 +8,9 @@ public class Asistencia {
      * Registra que un participante asistió a la reunión
      * @param participante El participante que asistió
      */
-    public Asistencia(Invitable participante) {
+    public Asistencia(Invitable participante) throws DatoInvalidoException {
+        if (participante == null)
+            throw new DatoInvalidoException("El participante no puede ser nulo");
         this.participante = participante;
     }
 
@@ -24,7 +26,9 @@ public class Asistencia {
      * Modifica al participante asociado al registro
      * @param participante El participante modificado
      */
-    public void setParticipante(Invitable participante) {
+    public void setParticipante(Invitable participante) throws DatoInvalidoException {
+        if (participante == null)
+            throw new DatoInvalidoException("El participante no puede ser nulo");
         this.participante = participante;
     }
 

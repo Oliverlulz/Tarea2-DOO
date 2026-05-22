@@ -14,7 +14,13 @@ public class Invitacion {
      * @param invitado La persona a la cual se envió la invitación a la reunión
      * @param hora La hora en la cual se envió la invitación
      */
-    public Invitacion(Invitable invitado, Instant hora) {
+    public Invitacion(Invitable invitado, Instant hora) throws DatoInvalidoException {
+        if (invitado == null)
+            throw new DatoInvalidoException("El invitado no puede ser nulo");
+
+        if (hora == null)
+            throw new DatoInvalidoException("La hora no puede ser nula");
+
         this.hora = hora;
         this.invitado = invitado;
     }
@@ -31,7 +37,9 @@ public class Invitacion {
      * Modifica la hora en la cual se envió la invitación
      * @param hora La hora a la cual se quiere cambiar
      */
-    public void setHora(Instant hora) {
+    public void setHora(Instant hora) throws DatoInvalidoException {
+        if (hora == null)
+            throw new DatoInvalidoException("La hora no puede ser nula");
         this.hora = hora;
     }
 
@@ -47,7 +55,9 @@ public class Invitacion {
      * Modifica a la persona que se tiene registro sobre el envío de la invitación
      * @param invitado La nueva persona que se quiere cambiar
      */
-    public void setInvitado(Invitable invitado) {
+    public void setInvitado(Invitable invitado) throws DatoInvalidoException {
+        if (invitado == null)
+            throw new DatoInvalidoException("El invitado no puede ser nulo");
         this.invitado = invitado;
     }
 

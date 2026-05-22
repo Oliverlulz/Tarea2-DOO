@@ -14,7 +14,17 @@ public class InvitadoExterno implements Invitable {
      * @param apellidos Los apellidos de esta persona
      * @param correo El correo electrónico donde se le puede contactar
      */
-    public InvitadoExterno(String nombre, String apellidos, String correo) {
+    public InvitadoExterno(String nombre, String apellidos,
+                           String correo) throws DatoInvalidoException {
+        if (nombre == null || nombre.isBlank())
+            throw new DatoInvalidoException("El nombre no puede estar vacío");
+
+        if (apellidos == null || apellidos.isBlank())
+            throw new DatoInvalidoException("Los apellidos no pueden estar vacíos");
+
+        if (correo == null || correo.isBlank())
+            throw new DatoInvalidoException("El correo no puede estar vacío");
+
         this.nombre = nombre;
         this.apellidos = apellidos;
         this.correo = correo;
@@ -32,7 +42,9 @@ public class InvitadoExterno implements Invitable {
      * Modifica el nombre de una persona
      * @param nombre El nombre al cual se quiere cambiar
      */
-    public void setNombre(String nombre) {
+    public void setNombre(String nombre) throws DatoInvalidoException {
+        if (nombre == null || nombre.isBlank())
+            throw new DatoInvalidoException("El nombre no puede estar vacío");
         this.nombre = nombre;
     }
 
@@ -48,7 +60,9 @@ public class InvitadoExterno implements Invitable {
      * Cambia los apellidos registrados de esta persona
      * @param apellidos Los o el apellido al cual se desea cambiar
      */
-    public void setApellidos(String apellidos) {
+    public void setApellidos(String apellidos) throws DatoInvalidoException {
+        if (apellidos == null || apellidos.isBlank())
+            throw new DatoInvalidoException("Los apellidos no pueden estar vacíos");
         this.apellidos = apellidos;
     }
 
@@ -64,7 +78,9 @@ public class InvitadoExterno implements Invitable {
      * Modifica el correo registrado asociado a esta persona
      * @param correo El correo modificado de la persona
      */
-    public void setCorreo(String correo) {
+    public void setCorreo(String correo) throws DatoInvalidoException {
+        if (correo == null || correo.isBlank())
+            throw new DatoInvalidoException("El correo no puede estar vacío");
         this.correo = correo;
     }
 

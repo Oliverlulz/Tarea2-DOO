@@ -12,7 +12,9 @@ public class Departamento implements Invitable{
      * Crea un nuevo departamento con un nombre y sus empleados
      * @param Nombre el nombre que tiene este departamento
      */
-    public Departamento(String Nombre) {
+    public Departamento(String Nombre) throws DatoInvalidoException {
+        if (Nombre == null || Nombre.isBlank())
+            throw new DatoInvalidoException("El nombre no puede estar vacío");
         this.nombre = Nombre;
         empleados = new ArrayList();
     }
@@ -21,7 +23,9 @@ public class Departamento implements Invitable{
      * Agrega un empleado al departamento
      * @param empleado el empleado que se agrega
      */
-    public void agregarEmpleado(Empleado empleado) {
+    public void agregarEmpleado(Empleado empleado) throws DatoInvalidoException {
+        if (empleado == null)
+            throw new DatoInvalidoException("El empleado no puede ser nulo");
         empleados.add(empleado);
     }
 
@@ -45,7 +49,9 @@ public class Departamento implements Invitable{
      * Modifica el nombre del departamento
      * @param Nombre el nombre al cual se desea cambiar
      */
-    public void setNombreDepartamento(String Nombre) {
+    public void setNombreDepartamento(String Nombre) throws DatoInvalidoException {
+        if (Nombre == null || Nombre.isBlank())
+            throw new DatoInvalidoException("El nombre no puede estar vacío");
         this.nombre = Nombre;
     }
 
@@ -61,7 +67,9 @@ public class Departamento implements Invitable{
      * Cambia la lista actual de empleados por una nueva
      * @param empleados la lista nueva de empleados la cual se desea cambiar
      */
-    public void setEmpleados(ArrayList<Empleado> empleados) {
+    public void setEmpleados(ArrayList<Empleado> empleados) throws DatoInvalidoException {
+        if (empleados == null || empleados.size() == 0)
+            throw new DatoInvalidoException("La lista de empleados no puede estar vacía o ser nula");
         this.empleados = empleados;
     }
 

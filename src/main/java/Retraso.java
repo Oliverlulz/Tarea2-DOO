@@ -14,9 +14,12 @@ public class Retraso extends Asistencia {
      * @param participante La persona que asistió a la reunión
      * @param hora La hora a la cual la persona llegó a la reunión
      */
-    public Retraso(Invitable participante, Instant hora) {
-        this.hora = hora;
+    public Retraso(Invitable participante, Instant hora) throws DatoInvalidoException {
         super(participante);
+
+        if (hora == null)
+            throw new DatoInvalidoException("La hora no puede ser nula");
+        this.hora = hora;
     }
 
     /**
@@ -31,7 +34,9 @@ public class Retraso extends Asistencia {
      * Modifica la hora en la cual llegó un participante a la reunión
      * @param hora La hora a la cual se desea cambiar
      */
-    public void setHora(Instant hora) {
+    public void setHora(Instant hora) throws DatoInvalidoException {
+        if (hora == null)
+            throw new DatoInvalidoException("La hora no puede ser nula");
         this.hora = hora;
     }
 

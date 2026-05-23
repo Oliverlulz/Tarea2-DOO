@@ -33,14 +33,16 @@ class DepartamentoTest {
     @Test
     @DisplayName("Test obtener cantidad empleados")
     void testCantidadEmpleadosInicial() {
-        assertEquals(0, dpto.obtenerCantidadEmpleados());
+        assertEquals(1, dpto.obtenerCantidadEmpleados());
     }
 
     @Test
     @DisplayName("Test agregar empleado")
     void testDepartamentoAgregarEmpleado() throws DatoInvalidoException {
-        dpto.agregarEmpleado(emp);
-        assertEquals(1, dpto.obtenerCantidadEmpleados());
+        Empleado emp1 = new Empleado("2", "Carr.", "Pepe2",
+                                "pepe2123@gmail.com", dpto);
+        
+        assertEquals(2, dpto.obtenerCantidadEmpleados());
     }
 
     @Test

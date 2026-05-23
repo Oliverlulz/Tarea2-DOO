@@ -15,7 +15,13 @@ public class GeneradorInforme {
      * @param reunion Objeto Reunion desde el cual se extraen los datos
      * @param rutaArchivo Nombre o ruta del archivo de texto a crear
      */
-    public void generarInforme(Reunion reunion, String rutaArchivo){
+    static public void generarInforme(Reunion reunion, String rutaArchivo){
+        if (reunion == null) {
+            throw new IllegalArgumentException("No se puede generar un informe de una reunion nula.");
+        }
+        if (rutaArchivo == null || rutaArchivo.trim().isEmpty()) {
+            throw new IllegalArgumentException("La ruta del archivo de informe no puede estar vacia.");
+        }
         // El bloque try-with-resources asegura el cierre automatico del archivo al terminar
         try (PrintWriter escritor = new PrintWriter(new FileWriter(rutaArchivo))) {
             escritor.println("    INFORME DE REUNION ");
@@ -45,16 +51,16 @@ public class GeneradorInforme {
             escritor.println("El tipo de reunion: " + reunion.getTipoReunion());
             escritor.println();
 
-            escritor.print("Enlace / Sala: " + reunion.getUbicacion());
+            escritor.println("Enlace / Sala: " + reunion.getUbicacion());
             escritor.println();
 
-            escritor.print("Participantes de la reunion:");
+            escritor.println("Participantes de la reunion:");
             for(int i = 0; i < reunion.obtenerTotalAsistencia(); i++){
                 escritor.println("  - " + reunion.getAsistencias().get(i));
             }
             escritor.print("\n");
 
-            escritor.print("Notas de la reunion:");
+            escritor.println("Notas de la reunion:");
             for(int i = 0; i < reunion.getNotas().size(); i++){
                 escritor.println("  - " + reunion.getNotas().get(i));
             }

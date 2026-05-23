@@ -12,7 +12,7 @@ public abstract class Reunion {
     private Instant horaFin;
 
     private tipoReunion tipo;
-    private ArrayList<Invitable> invitados;
+    private ArrayList<Invitacion> invitaciones;
     private ArrayList<Asistencia> asistencias;
     private ArrayList<Nota> notas;
 
@@ -24,15 +24,45 @@ public abstract class Reunion {
      * @param duracionPrevista Tiempo estimado que durará la sesion
      * @param invitados        Lista de personas convocadas a la reunion
      */
-    public Reunion(Date fecha, Instant horaPrevista, Duration duracionPrevista, List<Invitable> invitados){
+    public Reunion(Date fecha, Instant horaPrevista, Duration duracionPrevista, tipoReunion tipo, ArrayList<Invitable> invitados) throws DatoInvalidoException {
+        if (fecha == null) {
+            throw new IllegalArgumentException("La fecha de la reunion no puede ser nula.");
+        }
+        if (horaPrevista == null) {
+            throw new IllegalArgumentException("La hora prevista no puede ser nula.");
+        }
+        if (duracionPrevista == null) {
+            throw new IllegalArgumentException("La duracion prevista no puede ser nula.");
+        }
+        if (duracionPrevista.isNegative() || duracionPrevista.isZero()) {
+            throw new IllegalArgumentException("La duracion de la reunion debe ser mayor a 0 minutos.");
+        }
+        if (tipo == null) {
+            throw new IllegalArgumentException("El tipo de reunion es obligatorio.");
+        }
         this.fecha = fecha;
         this.horaPrevista = horaPrevista;
         this.duracionPrevista = duracionPrevista;
-        this.invitados = new ArrayList<>();
+        this.tipo = tipo;
+
+        this.invitaciones = new ArrayList<>();
+        if (invitados == null || invitados.isEmpty()) {
+            throw new IllegalArgumentException("La reunion debe tener al menos un invitado asignado.");
+        }
         for(int i = 0; i < invitados.size(); i++){
             Invitable invitado = invitados.get(i);
+            if (invitado == null) {
+                throw new IllegalArgumentException("La lista contiene un invitado que es nulo.");
+            }
+            for (int j = i + 1; j < invitados.size(); j++) {
+                if (invitado.equals(invitados.get(j))) {
+                    throw new IllegalArgumentException("El invitado " + invitado + " esta repetido en la lista.");
+                }
+            }
+
             invitado.Invitar();
-            this.invitados.add(invitado);
+            Invitacion invitacion = new Invitacion(invitado, Instant.now());
+            this.invitaciones.add(invitacion);
         }
 
         this.asistencias = new ArrayList<>();
@@ -63,8 +93,8 @@ public abstract class Reunion {
      */
     public List<Invitable> obtenerAusencias(){
         ArrayList<Invitable> listaAusencias = new ArrayList<>();
-        for(int i = 0; i < this.invitados.size(); i++ ){
-            Invitable personaInvitada = this.invitados.get(i);
+        for(int i = 0; i < this.invitaciones.size(); i++ ){
+            Invitable personaInvitada = this.invitaciones.get(i).getInvitado();
             boolean asistio = false;
 
             for(int j = 0; j < this.asistencias.size(); j++ ){
@@ -92,7 +122,7 @@ public abstract class Reunion {
         ArrayList<Invitable> listaRetrasos = new ArrayList<>();
         for(int i = 0; i < this.asistencias.size(); i++ ){
             Asistencia asist = this.asistencias.get(i);
-            if(asist.getParticipante() instanceof Retraso){
+            if(asist instanceof Retraso){
                 listaRetrasos.add(asist.getParticipante());
             }
         }
@@ -116,7 +146,7 @@ public abstract class Reunion {
      * @return El porcentaje de asistencia como un valor decimal entre 0.0 y 100.0
      * */
     public float obtenerPorcentajeAsistencia(){
-        return ( (float)this.asistencias.size() / (float)this.invitados.size() ) * 100;
+        return ( (float)this.asistencias.size() / (float)this.invitaciones.size() ) * 100;
     }
 
     /**
@@ -125,14 +155,70 @@ public abstract class Reunion {
      * @param contenido Texto descriptivo que se guardara en la nota
      */
     public void crearNota(String contenido){
+        if (contenido == null || contenido.trim().isEmpty()) {
+            throw new IllegalArgumentException("No se puede añadir una nota vacia a la reunion.");
+        }
         this.notas.add(new Nota(contenido));
     }
 
-    public float calcularTiempoReal(){}
-    public void iniciar(){}
-    public void finalizar(){}
-
     /**
+     * Registra la llegada de un invitado a la reunion en tiempo real
+     * Valida que la reunion este en curso y evita registros duplicados
+     * @param invitado El {@link Invitable} que va ingresando a la sesion
+     * @param horaLlegada La marca de tiempo {@link Instant} de su ingreso
+     */
+    public void pasarAsistencia(Invitable invitado, Instant horaLlegada) throws DatoInvalidoException {
+        if (invitado == null || horaLlegada == null) {
+            throw new IllegalArgumentException("El invitado y la hora de llegada no pueden ser nulos.");
+        }
+        if (this.horaInicio == null) {
+            throw new IllegalStateException("No se puede pasar asistencia: la reunion aun no ha iniciado.");
+        }
+        if (this.horaFin != null) {
+            throw new IllegalStateException("No se puede pasar asistencia: la reunion ya finalizo.");
+        }
+
+        boolean esInvitadoValido = false;
+        for (int i = 0; i < this.invitaciones.size(); i++) {
+            if (this.invitaciones.get(i).getInvitado().equals(invitado)) {
+                esInvitadoValido = true;
+                break;
+            }
+        }
+
+        if (!esInvitadoValido) {
+            throw new IllegalArgumentException("El participante " + invitado + " no pertenece a la lista de invitados de esta reunion.");
+        }
+
+        for (int i = 0; i < this.asistencias.size(); i++) {
+            if (this.asistencias.get(i).getParticipante().equals(invitado)) {
+                throw new IllegalStateException("El participante " + invitado + " ya tiene su asistencia registrada.");
+            }
+        }
+
+        if (horaLlegada.isAfter(this.horaPrevista)) {
+            Retraso nuevaAsistencia = new Retraso(invitado, horaLlegada);
+            this.asistencias.add(nuevaAsistencia);
+        }else {
+            Asistencia nuevaAsistencia = new Asistencia(invitado);
+            this.asistencias.add(nuevaAsistencia);
+        }
+    }
+
+    public Duration calcularTiempoReal(){
+        if (this.horaInicio != null && this.horaFin != null) {
+            return Duration.between(this.horaInicio, this.horaFin);
+        }
+        return Duration.ZERO;
+    }
+    public void iniciar(){
+        this.horaInicio = Instant.now();
+    }
+    public void finalizar(){
+        this.horaFin = Instant.now();
+    }
+
+    /**y
      * Obtiene el tipo de reunion programada (Presencial o Virtual)
      * @return El identificador {@link tipoReunion} de la sesion
      */

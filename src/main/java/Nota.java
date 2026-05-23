@@ -23,6 +23,9 @@ public class Nota {
      * @param contenido El texto que se desea guardar en la nota
      */
     public Nota(String contenido) {
+        if (contenido == null || contenido.trim().isEmpty()) {
+            throw new IllegalArgumentException("El contenido de la nota no puede estar vacio.");
+        }
         this.contenido = contenido;
         this.fechaCreacion = new Date(); // Registra el momento actual automáticamente
     }

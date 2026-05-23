@@ -1,26 +1,32 @@
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.time.Duration;
 import java.time.Instant;
 
-public abstract class Reunion {
+public class Reunion { // por ahora no es abstract
     private LocalDate fecha;
-    private Instant horaPrevista;
+    private LocalTime horaPrevista;
     private Duration duracionPrevista;
-    private Instant horaInicio = null;
-    private Instant horaFin = null;
+    private LocalTime horaInicio = null;
+    private LocalTime horaFin = null;
 
-    private ArrayList<Empleado> listInvitados;
+    private ArrayList<Invitacion> listInvitados;
     private ArrayList<Asistencia> listAsistencia;
     private ArrayList<Retraso> listRestraso;
-    private ArrayList<Empleado> listAusencia;
+    private ArrayList<Invitacion> listAusencia;
+    private ArrayList<Nota> listNota;
 
-    public Reunion(Instant HoraPrevista,Duration DuracionPrevista,ArrayList Invitados){
+    public Reunion(LocalTime HoraPrevista,Duration DuracionPrevista,ArrayList Invitados){
         this.fecha = LocalDate.now();
         this.horaPrevista = HoraPrevista;
         this.duracionPrevista = DuracionPrevista;
-        this.listAusencia = Invitados;
+        this.listAsistencia = new ArrayList<>();
+        this.listRestraso = new ArrayList<>();
+        this.listInvitados = Invitados;
+        this.listAusencia = (ArrayList)Invitados.clone();
+        this.listNota = new ArrayList<>();
     }
 
     public void marcarAsistencia(Invitacion Invitado) throws DatoInvalidoException{
@@ -30,30 +36,49 @@ public abstract class Reunion {
             throw new DatoInvalidoException("No hay Invitado");
 
         if (horaInicio != null){
-            listAsistencia.add(new Asistencia(Invitado.getInvitado()));
+            listAsistencia.add(new Retraso(Invitado.getInvitado(), Instant.now()));
+            for (int i = 0;i< listAusencia.size();i++) {
+                if (Invitado == listAusencia.get(i))
+                    listAusencia.remove(i);
+            }
         } else {
             listRestraso.add(new Retraso(Invitado.getInvitado(), Instant.now()));
+            for (int i = 0;i<listAusencia.size();i++) {
+                if (Invitado == listAusencia.get(i))
+                    listAusencia.remove(i);
+            }
         }
     }
 
-    public List obtenerAsistencias() throws DatoInvalidoException{}
-    public List obtenerAusencias(){}
-    public List obtenerRetrasos(){}
-
     public int obtenerTotalAsistencia(){
-        return listRestraso.size()+listAsistencia.size();
+        return listAsistencia.size()+listRestraso.size();
     }
     public float obtenerPorcentajeAsistencia(){
         return (obtenerTotalAsistencia()*100)/listInvitados.size();
     }
-    public Instant calcularTiempoReal(){
-        return Instant.now();
+    public Duration calcularTiempoReal() throws DatoInvalidoException{
+        if (horaFin != null)
+            throw new DatoInvalidoException("La reunion todavia no inicia");
+        return Duration.between(horaInicio,LocalTime.now());
     }
     public void Iniciar() {
-        this.horaInicio = Instant.now();
+        this.horaInicio = LocalTime.now();
     }
     public void Finalizar() {
-        this.horaInicio = Instant.now();
+        this.horaInicio = LocalTime.now();
+    }
 
+    public void producirInforme(){
+
+    }
+
+    public List obtenerAsistencias(){
+        return listAsistencia;
+    }
+    public List obtenerAusencias(){
+        return listAusencia;
+    }
+    public List obtenerRetrasos(){
+        return listRestraso;
     }
 }

@@ -12,7 +12,7 @@ crearNota: para crear las notas se llama a esta función.
 
 -Class GeneradorInforme
 Para hacer el código más leíble y sencillo el crear el informe se dejó en una
-clase separada y es llamada por reunion.
+clase separada.
 
 Class InvitadoExterno:
 Para que fuera más fácil distinguir entre los empleados y los no empleados

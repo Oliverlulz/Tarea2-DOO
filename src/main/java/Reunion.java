@@ -226,15 +226,27 @@ public abstract class Reunion {
         }
     }
 
+    /**
+     * Cuando se terminó la reunion se puede
+     * calcular cuanto duro
+     * @return Tiempo que duro la reunion
+     */
     public Duration calcularTiempoReal(){
         if (this.horaInicio != null && this.horaFin != null) {
             return Duration.between(this.horaInicio, this.horaFin);
         }
         return Duration.ZERO;
     }
+    /**
+     * Inicio de la reunion
+     */
     public void iniciar(){
         this.horaInicio = Instant.now();
     }
+
+    /**
+     * Fin de la reunion y generador de informe
+     */
     public void finalizar(){
         this.horaFin = Instant.now();
         GeneradorInforme.generarInforme(this,"informe_test.txt");

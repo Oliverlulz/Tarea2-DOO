@@ -142,7 +142,7 @@ public abstract class Reunion {
     /**
      * Calcula el porcentaje de asistencia a la reunión en base al total de invitados.
      * Realiza una regla de tres relacionando los participantes presentes contra
-     * el total de de invitados
+     * el total de invitados
      * @return El porcentaje de asistencia como un valor decimal entre 0.0 y 100.0
      * */
     public float obtenerPorcentajeAsistencia(){
@@ -235,6 +235,12 @@ public abstract class Reunion {
      * @return Marca de tiempo {@link Instant} en formato UTC de la planificacion
      */
     public Instant getHoraPrevista() { return this.horaPrevista; }
+
+    /**
+     * Obtiene el bloque horario teorico o planificado para la duracion de la reunion
+     * @return Duracion {@link Duration}
+     */
+    public Duration getDuracionPrevista() { return this.duracionPrevista; }
 
     /**
      * Obtiene el registro exacto de la hora en que se inicio la reunion en vivo

@@ -18,4 +18,4 @@ Class InvitadoExterno:
 Para que fuera más fácil distinguir entre los empleados y los no empleados
 se creó otra clase con capacidades similares a Empleado sin ser la misma clase.
 
-![Uml](UML.png)
+![Uml](UMLpic.png)

@@ -4,6 +4,10 @@ import java.util.List;
 import java.time.Duration;
 import java.time.Instant;
 
+/**
+ * Reunion siendo la clase principal del projecto
+ * maneja la mayoria de datos
+ */
 public abstract class Reunion {
     private Date fecha;
     private Instant horaPrevista;

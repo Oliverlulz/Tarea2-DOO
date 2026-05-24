@@ -9,6 +9,7 @@ Cambios al UML:
 pasarAsistencia: para poder tener una forma de
 llamar a que se guarde la asistencia de un integrante de forma más óptima.
 crearNota: para crear las notas se llama a esta función.
+finalizar: crea un txt al terminar
 
 -Class GeneradorInforme
 Para hacer el código más leíble y sencillo el crear el informe se dejó en una

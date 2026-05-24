@@ -51,18 +51,35 @@ public abstract class Reunion {
         }
         for(int i = 0; i < invitados.size(); i++){
             Invitable invitado = invitados.get(i);
+
             if (invitado == null) {
                 throw new IllegalArgumentException("La lista contiene un invitado que es nulo.");
-            }
-            for (int j = i + 1; j < invitados.size(); j++) {
-                if (invitado.equals(invitados.get(j))) {
-                    throw new IllegalArgumentException("El invitado " + invitado + " esta repetido en la lista.");
-                }
-            }
+            } else if (invitado instanceof Departamento){
+                invitado.Invitar();
+                ArrayList<Empleado> emlpleadosDepa = ((Departamento) invitado).getEmpleados();
 
-            invitado.Invitar();
-            Invitacion invitacion = new Invitacion(invitado, Instant.now());
-            this.invitaciones.add(invitacion);
+                for (int j = 0; j < emlpleadosDepa.size(); j++) {
+                    Invitable invitadoDepa = emlpleadosDepa.get(i);
+                    for (int z = i + 1; j < invitados.size(); z++) {
+                        if (invitadoDepa.equals(invitados.get(z))) {
+                            throw new IllegalArgumentException("El invitado " + invitado + " esta repetido en la lista.");
+                        }
+                    }
+                    Invitacion invitacion = new Invitacion(invitadoDepa, Instant.now());
+                    this.invitaciones.add(invitacion);
+                }
+            } else {
+
+                for (int j = i + 1; j < invitados.size(); j++) {
+                    if (invitado.equals(invitados.get(j))) {
+                        throw new IllegalArgumentException("El invitado " + invitado + " esta repetido en la lista.");
+                    }
+                }
+                invitado.Invitar();
+                Invitacion invitacion = new Invitacion(invitado, Instant.now());
+                this.invitaciones.add(invitacion);
+
+            }
         }
 
         this.asistencias = new ArrayList<>();
@@ -216,6 +233,7 @@ public abstract class Reunion {
     }
     public void finalizar(){
         this.horaFin = Instant.now();
+        GeneradorInforme.generarInforme(this,"informe_test.txt");
     }
 
     /**y
@@ -275,4 +293,13 @@ public abstract class Reunion {
      * @return String con la sala asignada o el enlace de conexion segun corresponda.
      */
     public abstract String getUbicacion();
+    /**
+     * Entrega una descripción de la reunion
+     * @return El tipo y fecha de la reunion
+     */
+    @Override
+    public String toString() {
+        return "de "+tipo+" a las "+ fecha.toString();
+    }
 }
+
